@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using ASYNC.Model;
 namespace ASYNC.ViewModel
 {
@@ -17,7 +18,7 @@ namespace ASYNC.ViewModel
 
         public ViewModel()
         {
-            FuncPoints = new Points(2, 4);
+            FuncPoints = new Points(0, 5);
             Solution();
         }
 
@@ -25,23 +26,28 @@ namespace ASYNC.ViewModel
         {
             double result;
             bool ver = true;
-            while(ver)
+            if (Func(FuncPoints.point1) * Func(FuncPoints.point2) < 0)
             {
-                result = (FuncPoints.point1 + FuncPoints.point2) / 2;
-                if(Func(result) * Func(FuncPoints.point1) > 0)
+                while (ver)
                 {
-                    FuncPoints.point1 = result;
-                }
-                else if (Func(result) * Func(FuncPoints.point1) < 0)
-                {
-                    FuncPoints.point2 = result;
-                }
-                if(Epsilon * result < Epsilon)
-                {
-                    ver = false;
-                    Result = result;
+                    result = (FuncPoints.point1 + FuncPoints.point2) / 2;
+                    if (Func(result) * Func(FuncPoints.point1) > 0)
+                    {
+                        FuncPoints.point1 = result;
+                    }
+                    else if (Func(result) * Func(FuncPoints.point1) < 0)
+                    {
+                        FuncPoints.point2 = result;
+                    }
+                    if ((FuncPoints.point2 - FuncPoints.point1) / 2 < Epsilon)
+                    {
+                        ver = false;
+                        Result = Math.Round(result, 3);
+                    }
                 }
             }
+            else
+                MessageBox.Show("Корня не существует", null, MessageBoxButton.OK);
         }
 
         private double Func(double x)
